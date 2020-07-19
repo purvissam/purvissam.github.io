@@ -8,6 +8,9 @@
 <!-- Create a div where the graph will take place -->
 <div id="my_dataviz"></div>
 
+<!-- Load d3-annotation -->
+<script src="https://rawgit.com/susielu/d3-annotation/master/d3-annotation.min.js"></script>
+
 
 <script>
 
@@ -24,7 +27,28 @@ var svg = d3.select("#my_dataviz")
   .append("g")
     .attr("transform",
           "translate(" + margin.left + "," + margin.top + ")")
+  
+// Features of the annotation
+const annotations = [
+  {
+    note: {
+      label: "Here is the annotation label",
+      title: "Annotation title"
+    },
+    x: 100,
+    y: 100,
+    dy: 100,
+    dx: 100
+  }
+]
 
+// Add annotation to the chart
+const makeAnnotations = d3.annotation()
+  .annotations(annotations)
+  
+  svg.append("g")
+    .call(makeAnnotations)
+		  
 //Read the data
 d3.csv("cases_daily_aus.csv",
 
