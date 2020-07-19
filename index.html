@@ -43,7 +43,8 @@ yScale.domain([0, d3.max(data, function(d) { return d.ALL; })]);
          .text("value");
 		 
 	// Add the line
-    svg.append("path")
+    g.append("g")
+	  .append("path")
       .datum(data)
       .attr("fill", "none")
       .attr("stroke", "steelblue")
