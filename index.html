@@ -1,6 +1,12 @@
 <html>
-<script src='https://d3js.org/d3.v5.min.js'></script>
-<style> circle {fill: lightblue; stroke: black;} </style>
+<head>
+	<style>
+        .bar {
+            fill: steelblue;
+        }
+    </style>
+	<script src='https://d3js.org/d3.v5.min.js'></script>
+</head>
 <body onload='init()'>
 <svg width=1000 height=500>
 </svg>
@@ -34,7 +40,16 @@ yScale.domain([0, d3.max(data, function(d) { return d.ALL; })]);
          .attr("y", 6)
          .attr("dy", "0.71em")
          .attr("text-anchor", "end")
-         .text("ALL");
+         .text("value");
+		 
+	g.selectAll(".bar")
+         .data(data)
+         .enter().append("rect")
+         .attr("class", "bar")
+         .attr("x", function(d) { return xScale(d.Month); })
+         .attr("y", function(d) { return yScale(d.ALL); })
+         .attr("width", xScale.bandwidth())
+         .attr("height", function(d) { return height - yScale(d.ALL); });
 }
 </script>
 </body>
