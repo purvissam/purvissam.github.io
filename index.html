@@ -7,8 +7,7 @@
 <!-- Create a div where the graph will take place -->
 	<div id="my_dataviz"></div>s
 <script>
-async function init() {
-const data = await d3.csv("cases_daily_aus.csv");
+const data = d3.csv("cases_daily_aus.csv");
 
 // set the dimensions and margins of the graph
 var margin = {top: 10, right: 30, bottom: 30, left: 60},
