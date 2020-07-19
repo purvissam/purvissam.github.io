@@ -19,7 +19,7 @@ var yScale = d3.scaleLinear().range([height,0])
 var g = svg.append("g")
           .attr("transform", "translate(" + 100 + "," + 100 + ")");
 
-xScale.domain(data.map(function(d) { return d.Date; }));
+xScale.domain(data.map(function(d) { return d.Month; }));
 yScale.domain([0, d3.max(data, function(d) { return d.VIC; })]);
 
     g.append("g")
