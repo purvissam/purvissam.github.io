@@ -1,6 +1,81 @@
 <!-- Code from d3-graph-gallery.com -->
 <!DOCTYPE html>
+<html>
+<head>
+<style>
+     body{
+        background-color: whitesmoke;
+     }
+
+    :root {
+      --line-chart-color: #607D8B;
+      --annotation-context-color: #00796B;
+      --annotation-above-color: #00BFA5;
+      --annotation-anomaly-color: #E8336D;
+    }
+
+     svg {
+        background-color: white;
+        font-family: 'Lato';
+     }
+
+     .axis, .axis text {
+       fill: var(--line-chart-color);
+     }
+
+     .axis line, path {
+      stroke: var(--line-chart-color);
+     }
+
+     path {
+       fill: none;
+     }
+
+    .annotation path {
+      stroke: var(--annotation-context-color);
+    }
+
+    .annotation:not(.above):not(.anomaly) path {
+      stroke-dasharray: 1,3;
+    }
+
+    .annotation text {
+      fill: var(--annotation-context-color);
+    }
+
+    .annotation.above path {
+      stroke: var(--annotation-above-color);
+    }
+
+    .annotation.above text {
+      fill: var(--annotation-above-color);
+    }
+
+    .annotation.anomaly path {
+      stroke: var(--annotation-anomaly-color);
+      stroke-width: 2px;
+    }
+
+    .annotation.anomaly text {
+      fill: var(--annotation-anomaly-color);
+    }
+
+    .annotation-note-bg {
+      fill: rgba(0, 0, 0, 0);
+    }
+
+    .annotation-note-title {
+      font-weight: bold;
+    }
+
+    text.title {
+      font-size: 1.2em;
+      font-weight: bold;
+    }
+    </style>
 <meta charset="utf-8">
+</head>
+<body>
 
 <!-- Load d3.js -->
 <script src="https://d3js.org/d3.v4.js"></script>
@@ -34,21 +109,24 @@ var svg = d3.select("#my_dataviz")
 const annotations = [
   {
     note: {
-      label: "Here is the annotation label",
-      title: "Annotation title"
+      label: "First Wave"
     },
-    x: 100,
-    y: 100,
-    dy: 100,
-    dx: 100
+	type: d3.annotationCalloutCircle,
+    subject: { radius: 50 },
+    x: 140,
+    y: 320,
+    dy: -100,
+    dx: 50
   }
 ]
 
 // Add annotation to the chart
 const makeAnnotations = d3.annotation()
   .annotations(annotations)
+  .textWrap(30)
   
   svg.append("g")
+    .attr("class", "annotation-group")
     .call(makeAnnotations)
 		  
 //Read the data
@@ -131,3 +209,5 @@ d3.csv("cases_daily_aus.csv",
 })
 
 </script>
+</body>
+</html>
