@@ -103,12 +103,6 @@ d3.csv("cases_daily_aus.csv",
         .attr("class", "brush")
         .call(brush);
 		
-	// Add the annotation
-	line
-	   .append("g")
-	   .attr("class", "annotation-group")
-       .call(makeAnnotations) 
-
     // A function that set idleTimeOut to null
     var idleTimeout
     function idled() { idleTimeout = null; }
