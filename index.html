@@ -36,23 +36,7 @@ d3.csv("cases_daily_aus.csv",
   // Now I can use this dataset:
   function(data) {
 
-    const annotations = [
-	  {
-		note: {
-		  label: "Here is the annotation label",
-		  title: "Annotation title"
-		},
-		x: 100,
-		y: 100,
-		dy: 100,
-		dx: 100
-	  }
-	]
-
-	// Add annotation to the chart
-	const makeAnnotations = d3.annotation()
-	  .annotations(annotations)
-	// Add X axis --> it is a date format
+    // Add X axis --> it is a date format
     var x = d3.scaleTime()
       .domain(d3.extent(data, function(d) { return d.date; }))
       .range([ 0, width ]);
