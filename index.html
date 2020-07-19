@@ -42,14 +42,16 @@ yScale.domain([0, d3.max(data, function(d) { return d.ALL; })]);
          .attr("text-anchor", "end")
          .text("value");
 		 
-	g.selectAll(".bar")
-         .data(data)
-         .enter().append("rect")
-         .attr("class", "bar")
-         .attr("x", function(d) { return xScale(d.Month); })
-         .attr("y", function(d) { return yScale(d.ALL); })
-         .attr("width", xScale.bandwidth())
-         .attr("height", function(d) { return height - yScale(d.ALL); });
+	// Add the line
+    svg.append("path")
+      .datum(data)
+      .attr("fill", "none")
+      .attr("stroke", "steelblue")
+      .attr("stroke-width", 1.5)
+      .attr("d", d3.line()
+        .x(function(d) { return x(d.Month) })
+        .y(function(d) { return y(d.ALL) })
+        )
 }
 </script>
 </body>
