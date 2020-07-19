@@ -1,13 +1,15 @@
-<html>
-<head>
-	<!-- Load d3.js -->
-	<script src="https://d3js.org/d3.v4.js"></script>	
-</head>
-<body onload='init()'>
+<!-- Code from d3-graph-gallery.com -->
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<!-- Load d3.js -->
+<script src="https://d3js.org/d3.v4.js"></script>
+
 <!-- Create a div where the graph will take place -->
-	<div id="my_dataviz"></div>s
+<div id="my_dataviz"></div>
+
+
 <script>
-const data = d3.csv("cases_daily_aus.csv");
 
 // set the dimensions and margins of the graph
 var margin = {top: 10, right: 30, bottom: 30, left: 60},
@@ -22,13 +24,15 @@ var svg = d3.select("#my_dataviz")
   .append("g")
     .attr("transform",
           "translate(" + margin.left + "," + margin.top + ")");
-		  
-// When reading the csv, I must format variables:
+
+//Read the data
+d3.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/3_TwoNumOrdered_comma.csv",
+
+  // When reading the csv, I must format variables:
   function(d){
     return { date : d3.timeParse("%Y-%m-%d")(d.date), value : d.value }
   },
-  //https://www.covid19data.com.au/data-notes
-  //https://www.d3-graph-gallery.com/graph/line_brushZoom.html
+
   // Now I can use this dataset:
   function(data) {
 
@@ -126,7 +130,7 @@ var svg = d3.select("#my_dataviz")
           .y(function(d) { return y(d.value) })
       )
     });
-}
+
+})
+
 </script>
-</body>
-</html>
