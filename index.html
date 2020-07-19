@@ -41,8 +41,7 @@ var svg = d3.select("#my_dataviz")
   .append("g")
     .attr("transform",
           "translate(" + margin.left + "," + margin.top + ")")
-   .append("g")
-   .call(makeAnnotations)
+    .call(makeAnnotations)
 
 //Read the data
 d3.csv("cases_daily_aus.csv",
