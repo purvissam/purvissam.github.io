@@ -11,23 +11,6 @@
 
 <script>
 
-const annotations = [
-  {
-    note: {
-      label: "Here is the annotation label",
-      title: "Annotation title"
-    },
-    x: 100,
-    y: 100,
-    dy: 100,
-    dx: 100
-  }
-]
-
-// Add annotation to the chart
-const makeAnnotations = d3.annotation()
-  .annotations(annotations)
-
   // set the dimensions and margins of the graph
 var margin = {top: 10, right: 30, bottom: 30, left: 60},
     width = 460 - margin.left - margin.right,
@@ -41,7 +24,6 @@ var svg = d3.select("#my_dataviz")
   .append("g")
     .attr("transform",
           "translate(" + margin.left + "," + margin.top + ")")
-    .call(makeAnnotations)
 
 //Read the data
 d3.csv("cases_daily_aus.csv",
@@ -54,7 +36,23 @@ d3.csv("cases_daily_aus.csv",
   // Now I can use this dataset:
   function(data) {
 
-    // Add X axis --> it is a date format
+    const annotations = [
+	  {
+		note: {
+		  label: "Here is the annotation label",
+		  title: "Annotation title"
+		},
+		x: 100,
+		y: 100,
+		dy: 100,
+		dx: 100
+	  }
+	]
+
+	// Add annotation to the chart
+	const makeAnnotations = d3.annotation()
+	  .annotations(annotations)
+	// Add X axis --> it is a date format
     var x = d3.scaleTime()
       .domain(d3.extent(data, function(d) { return d.date; }))
       .range([ 0, width ]);
@@ -104,6 +102,12 @@ d3.csv("cases_daily_aus.csv",
       .append("g")
         .attr("class", "brush")
         .call(brush);
+		
+	// Add the annotation
+	line
+	   .append("g")
+	   .attr("class", "annotation-group")
+       .call(makeAnnotations) 
 
     // A function that set idleTimeOut to null
     var idleTimeout
@@ -149,6 +153,6 @@ d3.csv("cases_daily_aus.csv",
       )
     });
 
-})
+})//end of function data
 
 </script>
