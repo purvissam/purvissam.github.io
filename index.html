@@ -28,7 +28,7 @@ yScale.domain([0, d3.max(data, function(d) { return d.VIC; })]);
 		 
 	g.append("g")
          .call(d3.axisLeft(yScale).tickFormat(function(d){
-             return "$" + d;
+             return d;
          }).ticks(10))
          .append("text")
          .attr("y", 6)
