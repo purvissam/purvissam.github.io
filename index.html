@@ -20,7 +20,7 @@ var g = svg.append("g")
           .attr("transform", "translate(" + 100 + "," + 100 + ")");
 
 xScale.domain(data.map(function(d) { return d.Month; }));
-yScale.domain([0, d3.max(data, function(d) { return d.VIC; })]);
+yScale.domain([0, d3.max(data, function(d) { return d.ALL; })]);
 
     g.append("g")
          .attr("transform", "translate(0," + height + ")")
