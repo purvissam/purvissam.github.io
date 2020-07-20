@@ -72,6 +72,23 @@
       font-size: 1.2em;
       font-weight: bold;
     }
+	
+	.overlay {
+	  fill: none;
+	  pointer-events: all;
+	}
+	
+	.focus circle {
+	  fill: #F1F3F3;
+	  stroke: #6F257F;
+	  stroke-width: 5px;
+	}
+	  
+	.hover-line {
+	  stroke: #6F257F;
+	  stroke-width: 2px;
+	  stroke-dasharray: 3,3;
+	}
     </style>
 <meta charset="utf-8">
 </head>
@@ -91,20 +108,14 @@
 
 <script>
 
+var bisectDate = d3.bisector(function(d) { return d.date; }).left;
+
   // set the dimensions and margins of the graph
 var margin = {top: 10, right: 30, bottom: 30, left: 60},
     width = 460 - margin.left - margin.right,
     height = 400 - margin.top - margin.bottom;
 
-// append the svg object to the body of the page
-var svg = d3.select("#my_dataviz")
-  .append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-  .append("g")
-    .attr("transform",
-          "translate(" + margin.left + "," + margin.top + ")")
-  
+ 
 // Features of the annotation
 const annotations = [
   {
@@ -125,10 +136,15 @@ const makeAnnotations = d3.annotation()
   .annotations(annotations)
   .textWrap(30)
   
-  svg.append("g")
-    .attr("class", "annotation-group")
-    .call(makeAnnotations)
-		  
+var svg = d3.select("#my_dataviz")
+  .append("svg")
+	.attr("width", width + margin.left + margin.right)
+	.attr("height", height + margin.top + margin.bottom)
+  
+var g = svg.append("g")
+	    .attr("transform",
+		  "translate(" + margin.left + "," + margin.top + ")");
+  		  
 //Read the data
 d3.csv("cases_daily_aus.csv",
 
@@ -140,7 +156,13 @@ d3.csv("cases_daily_aus.csv",
   // Now I can use this dataset:
   function(data) {
 
-    // List of groups (here I have one group per column)
+    // append the svg object to the body of the page
+	
+	svg.append("g")
+    .attr("class", "annotation-group")
+    .call(makeAnnotations)
+	
+	// List of groups (here I have one group per column)
     var allGroup = ["ALL","NSW","VIC","QLD","SA","WA","TAS","NT","ACT"]
 	
 	// add the options to the button
@@ -156,7 +178,7 @@ d3.csv("cases_daily_aus.csv",
     var x = d3.scaleTime()
       .domain(d3.extent(data, function(d) { return d.date; }))
       .range([ 0, width ]);
-    svg.append("g")
+    g.append("g")
       .attr("transform", "translate(0," + height + ")")
       .call(d3.axisBottom(x));
 
@@ -164,21 +186,61 @@ d3.csv("cases_daily_aus.csv",
     var y = d3.scaleLinear()
       .domain([0, 500])
       .range([ height, 0 ]);
-    svg.append("g")
+    g.append("g")
       .call(d3.axisLeft(y));
 
     // Add the line
-    var  line = svg
-	  .append("g")
-	  .append("path")
-      .datum(data)
-      .attr("fill", "none")
-      .attr("stroke", "steelblue")
-      .attr("stroke-width", 1.5)
-      .attr("d", d3.line()
-        .x(function(d) { return x(d.date) })
-        .y(function(d) { return y(d.ALL) })
-        )
+    var lineChart = g.append("path")
+	  .datum(data)
+	  .attr("fill", "none")
+	  .attr("stroke", "steelblue")
+	  .attr("stroke-width", 1.5)
+	  .attr("d", d3.line()
+		.x(function(d) { return x(d.date) })
+		.y(function(d) { return y(d.ALL) })
+		);	   
+		
+	var focus = g.append("g")
+        .attr("class", "focus")
+        .style("display", "none");
+
+    focus.append("line")
+        .attr("class", "x-hover-line hover-line")
+        .attr("y1", 0)
+        .attr("y2", height);
+
+    focus.append("line")
+        .attr("class", "y-hover-line hover-line")
+        .attr("x1", width)
+        .attr("x2", width);
+
+    focus.append("circle")
+        .attr("r", 7.5);
+
+    focus.append("text")
+        .attr("x", 15)
+      	.attr("dy", ".31em");
+		
+	 svg.append("rect")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+        .attr("class", "overlay")
+        .attr("width", width)
+        .attr("height", height)
+        .on("mouseover", function() { focus.style("display", null); })
+        .on("mouseout", function() { focus.style("display", "none"); })
+        .on("mousemove", mousemove);
+		
+    function mousemove() {
+      var x0 = x.invert(d3.mouse(this)[0]),
+          i = bisectDate(data, x0, 1),
+          d0 = data[i - 1],
+          d1 = data[i],
+          d = x0 - d0.date > d1.date - x0 ? d1 : d0;
+      focus.attr("transform", "translate(" + x(d.date) + "," + y(d.ALL) + ")");
+      focus.select("text").text(function() { return d.ALL; });
+      focus.select(".x-hover-line").attr("y2", height - y(d.ALL));
+      focus.select(".y-hover-line").attr("x2", width + width);
+    }
 		
 	// A function that update the chart
     function update(selectedGroup) {
@@ -187,7 +249,7 @@ d3.csv("cases_daily_aus.csv",
       var dataFilter = data.map(function(d){return {date: d.date, value:d[selectedGroup]} })
 
       // Give these new data to update line
-      line
+      lineChart
           .datum(dataFilter)
           .transition()
           .duration(1000)
@@ -195,7 +257,7 @@ d3.csv("cases_daily_aus.csv",
             .x(function(d) { return x(+d.date) })
             .y(function(d) { return y(+d.value) })
           )
-          .attr("stroke", "steelblue")
+          .attr("stroke", "steelblue")	  
     }
 	
 	// When the button is changed, run the updateChart function
@@ -205,7 +267,6 @@ d3.csv("cases_daily_aus.csv",
         // run the updateChart function with this selected option
         update(selectedOption)
     })
-
 })
 
 </script>
