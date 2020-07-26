@@ -183,7 +183,7 @@ d3.csv("cases_daily_aus.csv",
     .call(makeAnnotations)
 	
 	// List of groups (here I have one group per column)
-    var allGroup = ["ALL","NSW","VIC","QLD","SA","WA","TAS","NT","ACT"]
+    var allGroup = ["ALL","VIC","Excluding VIC"]
 	
 	// add the options to the button
     d3.select("#selectButton")
@@ -274,7 +274,13 @@ d3.csv("cases_daily_aus.csv",
 		
 	// A function that update the chart
     function update(selectedGroup) {
-		window.location = selectedGroup.toLowerCase()+ ".html";       
+		if (selectedGroup == "ALL"){
+			window.location = "index.html";
+		}else if (selectedGroup == "Excluding VIC"){
+			window.location = "except.html";
+        }else {
+		    window.location = "vic.html";
+       }		     
     }
 	
 	// When the button is changed, run the updateChart function

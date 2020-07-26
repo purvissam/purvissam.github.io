@@ -120,7 +120,7 @@ var margin = {top: 10, right: 30, bottom: 30, left: 60},
 const annotations = [
   {
     note: {
-      label: "First Wave"
+      label: "First Wave (smaller)"
     },
 	type: d3.annotationCalloutCircle,
     subject: { radius: 50 },
@@ -131,7 +131,7 @@ const annotations = [
   },
   {
     note: {
-      label: "Second Wave"
+      label: "Second Wave "
     },
 	type: d3.annotationCalloutCircle,
     subject: { radius: 50 },
@@ -145,7 +145,7 @@ const annotations = [
 // Add annotation to the chart
 const makeAnnotations = d3.annotation()
   .annotations(annotations)
-  .textWrap(30)
+  .textWrap(100)
   
 var svg = d3.select("#my_dataviz")
   .append("svg")
@@ -174,7 +174,7 @@ d3.csv("cases_daily_aus.csv",
     .call(makeAnnotations)
 	
 	// List of groups (here I have one group per column)
-    var allGroup = ["ALL","NSW","VIC","QLD","SA","WA","TAS","NT","ACT"]
+    var allGroup = ["ALL","VIC","Excluding VIC"]
 	
 	// add the options to the button
     d3.select("#selectButton")
@@ -266,9 +266,11 @@ d3.csv("cases_daily_aus.csv",
     function update(selectedGroup) {
 	    if (selectedGroup == "ALL"){
 			window.location = "index.html";
-		}else{
-			window.location = selectedGroup.toLowerCase()+ ".html";
-        }			
+		}else if (selectedGroup == "Excluding VIC"){
+			window.location = "except.html";
+        }else {
+		    window.location = "vic.html";
+       }		
     }
 	
 	// When the button is changed, run the updateChart function

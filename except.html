@@ -131,7 +131,7 @@ const annotations = [
   },
   {
     note: {
-      label: "Second Wave"
+      label: "Second Wave (negligible)"
     },
 	type: d3.annotationCalloutCircle,
     subject: { radius: 50 },
@@ -145,7 +145,7 @@ const annotations = [
 // Add annotation to the chart
 const makeAnnotations = d3.annotation()
   .annotations(annotations)
-  .textWrap(30)
+  .textWrap(100)
   
 var svg = d3.select("#my_dataviz")
   .append("svg")
@@ -174,7 +174,7 @@ d3.csv("cases_daily_aus.csv",
     .call(makeAnnotations)
 	
 	// List of groups (here I have one group per column)
-    var allGroup = ["ALL","NSW","VIC","QLD","SA","WA","TAS","NT","ACT"]
+    var allGroup = ["ALL","VIC","Excluding VIC"]
 	
 	// add the options to the button
     d3.select("#selectButton")
@@ -182,7 +182,7 @@ d3.csv("cases_daily_aus.csv",
      	.data(allGroup)
       .enter()
     	.append('option')
-		.property("selected", function(d){ return d === "TAS"; })
+		.property("selected", function(d){ return d === "Excluding VIC"; })
       .text(function (d) { return d; }) // text showed in the menu
       .attr("value", function (d) { return d; }) // corresponding value returned by the button
 	
@@ -207,7 +207,7 @@ d3.csv("cases_daily_aus.csv",
         .attr("text-anchor", "middle")  
         .style("font-size", "16px") 
         .style("text-decoration", "underline")  
-        .text("New Covid Cases Per Day in TAS");
+        .text("New Covid Cases Per Day in AUS (Excluding VIC)");
 
     // Add the line
     var lineChart = g.append("path")
@@ -217,7 +217,7 @@ d3.csv("cases_daily_aus.csv",
 	  .attr("stroke-width", 1.5)
 	  .attr("d", d3.line()
 		.x(function(d) { return x(d.date) })
-		.y(function(d) { return y(d.TAS) })
+		.y(function(d) { return y(d.ALL - d.VIC) })
 		);	   
 		
 	var focus = g.append("g")
@@ -256,19 +256,20 @@ d3.csv("cases_daily_aus.csv",
           d0 = data[i - 1],
           d1 = data[i],
           d = x0 - d0.date > d1.date - x0 ? d1 : d0;
-      focus.attr("transform", "translate(" + x(d.date) + "," + y(d.TAS) + ")");
-      focus.select("text").text(function() { return d.TAS; });
-      focus.select(".x-hover-line").attr("y2", height - y(d.TAS));
+      focus.attr("transform", "translate(" + x(d.date) + "," + y(d.ALL - d.VIC) + ")");
+      focus.select("text").text(function() { return d.ALL - d.VIC; });
+      focus.select(".x-hover-line").attr("y2", height - y(d.ALL - d.VIC));
       focus.select(".y-hover-line").attr("x2", width + width);
     }
 		
-	// A function that update the chart
-    function update(selectedGroup) {
+	function update(selectedGroup) {
 	    if (selectedGroup == "ALL"){
 			window.location = "index.html";
-		}else{
-			window.location = selectedGroup.toLowerCase()+ ".html";
-        }			
+		}else if (selectedGroup == "Excluding VIC"){
+			window.location = "except.html";
+        }else {
+		    window.location = "vic.html";
+       }				
     }
 	
 	// When the button is changed, run the updateChart function
