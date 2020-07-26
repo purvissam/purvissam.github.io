@@ -208,6 +208,15 @@ d3.csv("cases_daily_aus.csv",
       .range([ height, 0 ]);
     g.append("g")
       .call(d3.axisLeft(y));
+	  
+	// text label for the y axis
+    g.append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 0 - margin.left)
+      .attr("x",0 - (height / 2))
+      .attr("dy", "1em")
+      .style("text-anchor", "middle")
+      .text("New Cases");     
 
     // Add the line
     var lineChart = g.append("path")
