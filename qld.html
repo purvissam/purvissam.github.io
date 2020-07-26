@@ -171,6 +171,7 @@ d3.csv("cases_daily_aus.csv",
      	.data(allGroup)
       .enter()
     	.append('option')
+		.property("selected", function(d){ return d === "QLD"; })
       .text(function (d) { return d; }) // text showed in the menu
       .attr("value", function (d) { return d; }) // corresponding value returned by the button
 	
@@ -197,7 +198,7 @@ d3.csv("cases_daily_aus.csv",
 	  .attr("stroke-width", 1.5)
 	  .attr("d", d3.line()
 		.x(function(d) { return x(d.date) })
-		.y(function(d) { return y(d.ALL) })
+		.y(function(d) { return y(d.QLD) })
 		);	   
 		
 	var focus = g.append("g")
@@ -236,15 +237,19 @@ d3.csv("cases_daily_aus.csv",
           d0 = data[i - 1],
           d1 = data[i],
           d = x0 - d0.date > d1.date - x0 ? d1 : d0;
-      focus.attr("transform", "translate(" + x(d.date) + "," + y(d.ALL) + ")");
-      focus.select("text").text(function() { return d.ALL; });
-      focus.select(".x-hover-line").attr("y2", height - y(d.ALL));
+      focus.attr("transform", "translate(" + x(d.date) + "," + y(d.QLD) + ")");
+      focus.select("text").text(function() { return d.QLD; });
+      focus.select(".x-hover-line").attr("y2", height - y(d.QLD));
       focus.select(".y-hover-line").attr("x2", width + width);
     }
 		
 	// A function that update the chart
     function update(selectedGroup) {
-		window.location = selectedGroup.toLowerCase()+ ".html";       
+	    if (selectedGroup == "ALL"){
+			window.location = "index.html";
+		}else{
+			window.location = selectedGroup.toLowerCase()+ ".html";
+        }			
     }
 	
 	// When the button is changed, run the updateChart function
