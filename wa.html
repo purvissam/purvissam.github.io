@@ -200,6 +200,14 @@ d3.csv("cases_daily_aus.csv",
       .range([ height, 0 ]);
     g.append("g")
       .call(d3.axisLeft(y));
+	  
+	g.append("text")
+        .attr("x", (width / 2))             
+        .attr("y", 4)
+        .attr("text-anchor", "middle")  
+        .style("font-size", "16px") 
+        .style("text-decoration", "underline")  
+        .text("New Covid Cases Per Day in WA");
 
     // Add the line
     var lineChart = g.append("path")

@@ -209,22 +209,13 @@ d3.csv("cases_daily_aus.csv",
     g.append("g")
       .call(d3.axisLeft(y));
 	  
-	// text label for the y axis
-    g.append("text")
-      .attr("transform", "rotate(-90)")
-      .attr("y", 0 - margin.left)
-      .attr("x",0 - (height / 2))
-      .attr("dy", "1em")
-      .style("text-anchor", "middle")
-      .text("New Cases");  
-
 	g.append("text")
         .attr("x", (width / 2))             
-        .attr("y", 0 - (margin.top / 2))
+        .attr("y", 4)
         .attr("text-anchor", "middle")  
         .style("font-size", "16px") 
         .style("text-decoration", "underline")  
-        .text("New Covid Cases in AUS vs Date");
+        .text("New Covid Cases Per Day in AUS");
 
     // Add the line
     var lineChart = g.append("path")
