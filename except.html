@@ -120,7 +120,7 @@ var margin = {top: 10, right: 30, bottom: 30, left: 60},
 const annotations = [
   {
     note: {
-      label: "First Wave"
+      label: "First Wave (big)"
     },
 	type: d3.annotationCalloutCircle,
     subject: { radius: 50 },
@@ -138,14 +138,14 @@ const annotations = [
     x: 400,
     y: 320,
     dy: -100,
-    dx: -50
+    dx: -30
   }
 ]
 
 // Add annotation to the chart
 const makeAnnotations = d3.annotation()
   .annotations(annotations)
-  .textWrap(100)
+  .textWrap(30)
   
 var svg = d3.select("#my_dataviz")
   .append("svg")

@@ -131,21 +131,21 @@ const annotations = [
   },
   {
     note: {
-      label: "Second Wave "
+      label: "Second Wave (bigger) "
     },
 	type: d3.annotationCalloutCircle,
     subject: { radius: 50 },
     x: 400,
     y: 320,
     dy: -100,
-    dx: -50
+    dx: -30
   }
 ]
 
 // Add annotation to the chart
 const makeAnnotations = d3.annotation()
   .annotations(annotations)
-  .textWrap(100)
+  .textWrap(30)
   
 var svg = d3.select("#my_dataviz")
   .append("svg")
