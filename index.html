@@ -89,6 +89,15 @@
 	  stroke-width: 2px;
 	  stroke-dasharray: 3,3;
 	}
+	
+	.tooltip {
+        fill: white;
+        stroke: #000;
+    }
+	
+	.tooltip-date, .tooltip-count {
+        font-weight: bold;
+    }
     </style>
 <meta charset="utf-8">
 </head>
@@ -229,8 +238,10 @@ d3.csv("cases_daily_aus.csv",
         .attr("r", 7.5);
 
     focus.append("text")
+	    .attr("class", "tooltip-count")
         .attr("x", 15)
-      	.attr("dy", ".31em");
+      	.attr("dy", ".31em")
+		.attr("y", -2);
 		
 	 svg.append("rect")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
@@ -248,7 +259,7 @@ d3.csv("cases_daily_aus.csv",
           d1 = data[i],
           d = x0 - d0.date > d1.date - x0 ? d1 : d0;
       focus.attr("transform", "translate(" + x(d.date) + "," + y(d.ALL) + ")");
-      focus.select("text").text(function() { return d.ALL; });
+      focus.select(".tooltip-count").text(d.ALL);
       focus.select(".x-hover-line").attr("y2", height - y(d.ALL));
       focus.select(".y-hover-line").attr("x2", width + width);
     }
